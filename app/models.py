@@ -4,7 +4,7 @@ from sqlalchemy.sql             import func
 from werkzeug.datastructures    import FileStorage
 from werkzeug.utils             import secure_filename
 
-with open("C:/flies/Programming/koding/python/flask apps/app/images/6p915t-modified.jpg", 'rb') as f:
+with open("app/images/6p915t-modified.jpg", 'rb') as f:
     upload = FileStorage(f, '6p915t-modified.jpg', name='file', content_type='image/jpg')
     filenames = secure_filename(upload.filename)
     mimetypes = upload.mimetype
