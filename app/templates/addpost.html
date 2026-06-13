@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Pes{% endblock %}
+{% block content %}
+<div id="wrapper">
+    {% include "navbarnosearch.html" %} 
+
+    <div class="container my-3">
+        <h1>Добавление новости</h1>
+        <hr>
+
+        <form method="POST" action="/add_post"  enctype="multipart/form-data">
+            <div class="mb-3" >
+                <label for="text" class="form-label">Название новости</label>
+                <input type="text" id="exampleInputName1" name = "title" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+                <textarea class="form-control" name = "text" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+            <br>
+            <br>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

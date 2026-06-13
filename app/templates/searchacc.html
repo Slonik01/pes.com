@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}pes{% endblock %}
+{% block content %}
+<div id="wrapper">
+  {% include "navbar.html" %} 
+
+  <div class="container my-3">
+    <div class="divfornewsheadline">
+      <h1>Галлерея песов</h1>
+    </div>
+    <hr>
+    <center>
+      <div class="pescardscont">
+        {% for card in values %}
+        <div class="pescardcont">
+            <div class="card" style="width: 18rem;">
+              <a href="{{ url_for('views.account', name=card.name) }}" style="all:unset; cursor: pointer" class="btn btn-primary"> 
+                <img src="{{ url_for('views.avatar', image_id = card.id) }}" class="card-img-top zhopa" alt="...">
+              </a>
+              <div class="card-body">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="card-title">{{ card.name|truncate(16) }}</h5>
+
+                </div>
+              </div>
+            </div>
+          
+        </div>
+        {% endfor %}
+
+      </div>
+    </center>
+  </div>
+</div>
+{% endblock %}

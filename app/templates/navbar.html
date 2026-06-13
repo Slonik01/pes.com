@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{ url_for('views.index', pageid=1) }}">Пёс</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ url_for('views.gallery', pageid=1) }}">Песы</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('views.account', name = current_user.name) }}">Аккаунт</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"">Друзья</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.logout') }}">Выйти</a>
+          </li>
+        </ul>
+        <form method="POST" class="d-flex" role="search">
+          <input class="form-control me-2" type="text" name = "search" placeholder="Напишите имя песа" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Искать</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">Друзья</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="list-group">
+        <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">@slon</button>
+        <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">@mr_pes</button>
+        <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">@God</button>
+      </div>
+      <br>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    {% for request in recieved %}
+    <div id="liveToast" class="toast" role="alert" style="display:block" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Пользователь хочет добавить вас в друзья</strong>
+      </div>
+      <div class="toast-body">
+        <a type="button" class="btn btn-primary btn-sm" href="{{ url_for('views.acceptfriend', id = request) }}">Добавить</a>
+        <a type="button" class="btn btn-danger btn-sm" href="{{ url_for('views.addfriend', id = request) }}">Отклонить</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>

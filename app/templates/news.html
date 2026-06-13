@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Pes{% endblock %}
+{% block content %}
+<div id="wrapper">
+  {% include "navbar.html" %} 
+
+  <div class="container my-3">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="divfornewsheadline">
+          <h1>Новости песов</h1>
+          <a href="{{ url_for('views.addpost') }}">
+            <button class="btn btn-primary btn-lg">Добавить новость</button>
+          </a>
+        </div>
+        <hr>
+        {% for one_news in values[::-1] %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="card-title">{{ one_news.title }}</h5>
+                <small>{{ one_news.date }}</small>
+              </div>
+
+              <div class="d-flex w-100 justify-content-between">
+                <p class="card-text">{{ one_news.text|truncate(87) }}</p>
+                <small>by <a href="{{ url_for('views.account', name = one_news.userupload) }}">{{ one_news.userupload }}</a></small>
+              </div>
+              
+              <div class="d-flex w-100 justify-content-between">
+                <a href="{{ url_for('views.postdetail', id=one_news.id) }}" class="btn btn-outline-primary">Смотреть новость</a>
+
+
+                {% if current_user.id in one_news.likes|map(attribute="author")|list %}
+                <!-- fas fa-thumbs-up  -->
+                <i class="btn btn-danger" id="like-button-{{one_news.id}}" onclick="likepost({{one_news.id}})"><span style="font-style: normal" id="likes-count-{{one_news.id}}">❤ {{ one_news.likes|length }}</span> </i>
+                {% else %}
+                <!-- far fa-thumbs-up  -->
+                <i class="btn btn-outline-danger" id="like-button-{{one_news.id}}" onclick="likepost({{one_news.id}})"><span style="font-style: normal" id="likes-count-{{one_news.id}}">❤ {{ one_news.likes|length }}</span> </i>
+                {% endif %}
+
+              </div>
+              
+            </div>
+          </div>
+        {% endfor %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-end">
+            {% if pageid == 1 %}
+            <li class="page-item disabled">
+              <a class="page-link">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('views.index', pageid=pageid-1) }}">Previous</a>
+            </li>
+            {% endif %}
+            {% if pageid == 1 %}
+            <li class="page-item"><a class="page-link active" href="{{ url_for('views.index', pageid=1) }}">1</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=2) }}">2</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=3) }}">3</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=4) }}">4</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=5) }}">5</a></li>
+            {% elif pageid == 2 %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=1) }}">1</a></li>
+            <li class="page-item"><a class="page-link active" href="{{ url_for('views.index', pageid=2) }}">2</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=3) }}">3</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=4) }}">4</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=5) }}">5</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=pageid-2) }}">{{ pageid-2 }}</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=pageid-1) }}">{{ pageid-1 }}</a></li>
+            <li class="page-item"><a class="page-link active" href="{{ url_for('views.index', pageid=pageid) }}">{{ pageid }}</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=pageid+1) }}">{{ pageid+1 }}</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('views.index', pageid=pageid+2) }}">{{ pageid+2 }}</a></li>
+            {% endif %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('views.index', pageid=pageid+1) }}">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="col-md-4">
+        <h1>Топ новостей</h1>
+        <hr>
+
+        
+        <div class="list-group">
+          {% for new in topfive %}
+          <a href="{{ url_for('views.postdetail', id=new.id) }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ new.title|truncate(18) }}</h5>
+              <small>{{ new.date }}</small>
+            </div>
+            <p class="mb-1">{{ new.text|truncate(40) }}</p>
+            <div class="d-flex w-100 justify-content-between">
+              <small>by {{ new.userupload }}</small>
+
+              {% if current_user.id in new.likes|map(attribute="author")|list %}
+              <i id="like-button-{{new.id}}"><span style="font-style: normal" id="likes-count-{{new.id}}">❤ {{ new.likes|length }}</span> </i>
+              {% else %}
+              <i id="like-button-{{new.id}}"><span style="font-style: normal" id="likes-count-{{new.id}}">❤ {{ new.likes|length }}</span> </i>
+              {% endif %}
+
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% endblock %}

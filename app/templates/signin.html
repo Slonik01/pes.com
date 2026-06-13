@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}pes{% endblock %}
+{% block content %}
+
+<div class="container-lg">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <center><h1>Sign in to pes</h1></center>
+    <br>
+    <br>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-success alert-dismissable fade show" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+        {% endfor%}
+    {% endif %}
+    {% endwith %}
+</div>
+
+<div class="container-lg">
+    <form method="post" action="/sign_in">
+        <div class="mb-3" >
+            <label for="name" class="form-label">Account name</label>
+            <input type="text" id="exampleInputName1" name="name" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">we will spam ur email</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="check" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="check">Remember me</label>
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Submit">
+
+    </form>
+</div>
+
+<div class="container-lg">
+    <center>
+        <div class="pb2">        
+            <button type="submit" class="btn btn-secondary btn-lg">Sign in</button>
+            <a href="{{ url_for('auth.login') }}">
+                <button type="submit" class="btn btn-primary btn-lg">Log in</button>
+            </a>
+        </div>
+    </center>
+</div>
+
+
+{% endblock %}

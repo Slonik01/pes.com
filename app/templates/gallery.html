@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}pes{% endblock %}
+{% block content %}
+<div id="wrapper">
+  {% include "navbar.html" %} 
+
+  <div class="container my-3">
+    <div class="divfornewsheadline">
+      <a href="{{ url_for('views.top10') }}">
+        <button class="btn btn-primary btn-lg">Топ 10 Песов</button>
+      </a>
+      <h1>Галлерея песов</h1>
+      <a href="{{ url_for('views.addpes') }}">
+        <button class="btn btn-primary btn-lg">Добавить песа</button>
+      </a>
+
+
+    </div>
+    <hr>
+    <center>
+      <div class="pescardscont">
+        {% for card in values[::-1] %}
+        <div class="pescardcont">
+            <div class="card" style="width: 18rem;">
+              <a href="{{ url_for('views.pescard', id=card.id) }}" style="all:unset; cursor: pointer" class="btn btn-primary"> 
+                <img src="{{ url_for('views.download', image_id = card.id) }}" class="card-img-top zhopa" alt="...">
+              </a>
+              <div class="card-body">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="card-title">{{ card.title|truncate(16) }}</h5>
+
+                  
+                  
+                  {% if current_user.id in card.likes|map(attribute="author")|list %}
+                  <i class="btn btn-danger" id="like-button-{{card.id}}" onclick="like({{card.id}})"><span style="font-style: normal" id="likes-count-{{card.id}}">❤ {{ card.likes|length }}</span> </i>
+                  {% else %}
+                  <i class="btn btn-outline-danger" id="like-button-{{card.id}}" onclick="like({{card.id}})"><span style="font-style: normal" id="likes-count-{{card.id}}">❤ {{ card.likes|length }}</span> </i>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          
+        </div>
+        {% endfor %}
+
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if pageid == 1 %}
+          <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('views.gallery', pageid=pageid-1) }}">Previous</a>
+          </li>
+          {% endif %}
+          {% if pageid == 1 %}
+          <li class="page-item"><a class="page-link active" href="{{ url_for('views.gallery', pageid=1) }}">1</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=2) }}">2</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=3) }}">3</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=4) }}">4</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=5) }}">5</a></li>
+          {% elif pageid == 2 %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=1) }}">1</a></li>
+          <li class="page-item"><a class="page-link active" href="{{ url_for('views.gallery', pageid=2) }}">2</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=3) }}">3</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=4) }}">4</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=5) }}">5</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=pageid-2) }}">{{ pageid-2 }}</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=pageid-1) }}">{{ pageid-1 }}</a></li>
+          <li class="page-item"><a class="page-link active" href="{{ url_for('views.gallery', pageid=pageid) }}">{{ pageid }}</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=pageid+1) }}">{{ pageid+1 }}</a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('views.gallery', pageid=pageid+2) }}">{{ pageid+2 }}</a></li>
+          {% endif %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('views.gallery', pageid=pageid+1) }}">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </center>
+  </div>
+</div>
+{% endblock %}

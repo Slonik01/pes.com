@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Pes{% endblock %}
+{% block content %}
+<div id="wrapper">
+    {% include "navbarnosearch.html" %} 
+
+    <div class="container my-3">
+        <form method="POST" action="/add_pes"  enctype="multipart/form-data">
+            <h1>Добавление песа</h1>
+            <hr>
+            <div class="mb-3" >
+                <label for="text" class="form-label">Имя песа</label>
+                <input type="text" id="exampleInputName1" name = "title" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+                <textarea class="form-control" name = "desc" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+            <div class="input-group">
+                <input type="file" name="pic" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+            </div>
+
+            <br>
+            <br>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

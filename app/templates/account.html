@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock %}
+{% block content %}
+<div id="wrapper">
+  {% include "navbar.html" %} 
+    <br>
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Изменение профиля</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <form method="POST" autocomplete="off">
+                <label for="change-desc" class="col-form-label">Описание профиля:</label>
+                <input type="text" class="form-control" name = "desc" id="change-desc">
+                <br>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+              </form>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-outline-primary" href="{{ url_for('views.setcolor', color='primary') }}">Синий</a>
+            <a class="btn btn-outline-danger" href="{{ url_for('views.setcolor', color='danger') }}">Красный</a>
+            <a class="btn btn-outline-success" href="{{ url_for('views.setcolor', color='success') }}">Зеленый</a>
+            <a class="btn btn-outline-warning" href="{{ url_for('views.setcolor', color='warning') }}">Желтый</a>
+            <a class="btn btn-outline-info" href="{{ url_for('views.setcolor', color='info') }}">Голубой</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <center>
+      <div class="card border-{{ user.color }} mb-3" style="max-width: 1000px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ url_for('views.avatar', image_id = user.id) }}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              
+              <h5 class="card-title"><h1>@{{ name }}</h1></h5>
+              <p class="card-text"><small class="text-body-secondary">Email: {{ email }}</small></p>
+              <p class="card-text text-body">{{ user.description }}</p>
+                
+              {% if current_user.id != user.id and user.id not in current_user.friends.split() %}
+                <a class="btn btn-outline-success" href="{{ url_for('views.addfriend', id=user.id) }}">Добавить в друзья</a>
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+      {% if current_user.id == user.id %}
+        <button type="button" class="btn btn-{{ user.color }} float-right" data-bs-toggle="modal" data-bs-target="#exampleModal">Настроить профиль</button>
+      {% endif %}
+    </center>
+
+    <br>
+
+    <div class="container my-3">
+      <h1>Лайкнутые песы</h1>
+      <hr>
+      <center>
+        <div class="pescardscont">
+
+          {% for card in values %}
+          <div class="pescardcont">
+              <div class="card" style="width: 18rem;">
+                <a href="{{ url_for('views.pescard', id=card.id) }}" style="all:unset; cursor: pointer" class="btn btn-primary"> 
+                  <img src="{{ url_for('views.download', image_id = card.id) }}" class="card-img-top zhopa" alt="...">
+                </a>
+                <div class="card-body">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="card-title">{{ card.title|truncate(16) }}</h5>
+                  </div>
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </center>
+</div>
+{% endblock %}

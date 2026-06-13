@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Pes{% endblock %}
+{% block content %}
+<div id="wrapper">
+    {% include "navbar.html" %} 
+
+    <div class="container my-3" style="max-width: 1150px;">
+      <h1>Новость</h1>
+      <hr>
+      <br>
+        <div class="card mb-3 border-primary" style="margin:auto; position: relative">
+
+
+          <div class="card-body">
+            <div class="d-flex w-100 justify-content-between">
+              <h3 class="card-title">{{ post.title }}</h3>
+
+              {% if current_user.id in post.likes|map(attribute="author")|list %}
+              <i class="btn btn-danger" id="like-button-{{post.id}}" onclick="like({{post.id}})"><span style="font-style: normal" id="likes-count-{{post.id}}">❤ {{ post.likes|length }}</span> </i>
+              {% else %}
+              <i class="btn btn-outline-danger" id="like-button-{{post.id}}" onclick="like({{post.id}})"><span style="font-style: normal" id="likes-count-{{post.id}}">❤ {{ post.likes|length }}</span> </i>
+              {% endif %}
+
+            </div>
+
+            <p class="card-text">{{ post.text }}</p>
+
+
+            <div class="popkaslonika" style="position: absolute; bottom: 0; margin-bottom:10px">
+                <p class="card-text"><small class="text-body-secondary">{{ post.date }}</small></p>
+                <p class="card-text float-right">by <a href="{{ url_for('views.account', name = post.userupload) }}">{{ post.userupload }}</a></p>
+            </div>
+
+            <br>
+            <br>
+          </div>
+          
+    </div>
+
+    <div class="card mb-3" style="max-width: 1150px; margin:auto">
+      <form method="POST" autocomplete="off">
+        <h4><label for="name" style="padding-left:10px; padding-top:5px" class="form-label">Комментарии</label></h4>
+        <input type="text" id="exampleInputName1" name="comment" placeholder="Напишите комментарий" class="form-control">
+      </form>
+
+      {% for comment in comments %}
+      {% with user = User.query.filter_by(name=comment.author).first() %}
+      <br>
+
+      <div class="card border-{{ user.color }}">
+            <div class="card-body" style="padding: 0;">
+              <div class="card-header">
+                <img src="{{ url_for('views.avatar', image_id = user.id) }}" class="" style="height:50px; width:50px" alt="...">
+                  <a href="{{ url_for('views.account', name = comment.author) }}" style="padding-left: 5px;">{{ comment.author }}</a>
+
+                  {% if current_user.name == comment.author %}
+                  <a class="btn btn-outline-danger" href="{{ url_for('views.delcommentpost', pesid=comment.pesid, id=comment.id) }}" style="float: right; margin-top:5px">Удалить</a>
+                  {% endif %}
+              </div>
+              <div class="card-body">
+
+                {% for word in comment.text.split() %}
+                  {% if word[0] == "@" %}
+                    <a href="{{ url_for('views.account', name = word[1:]) }}">{{ word }}</a>
+                  {% else %}
+                    {{ word }}
+                  {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
+      </div>
+      {% endwith %}
+      {% endfor %}
+  </div>
+    
+</div>
+
+{% endblock %}
